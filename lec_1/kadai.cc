@@ -1,3 +1,5 @@
+#include<iostream>
+
 ランク：S
 最高タイプ数：190
 
@@ -18,8 +20,6 @@ int main(void){
     return 0;
 }
 
-#include<iostream>
-
 class Matrix{
 public:
     double a,b,c,d;
@@ -28,6 +28,7 @@ public:
         a=x, b=y;
         c=z, d=w;
     }
+
     Matrix operator + (const Matrix &q) const{
         Matrix m;
         m.a=a+q.a;
@@ -36,6 +37,7 @@ public:
         m.d=d+q.d;
         return(m);
     }
+
     Matrix operator *(const Matrix &q) const{
         Matrix m;
         m.a=a*q.a+b*q.c;
@@ -57,4 +59,12 @@ public:
         m.d=1*a/(a*d-b*c);
         return(m);
     }
-}
+
+    bool operator==(const Matrix &q){
+        if(a==q.a && b==q.b && c==q.c && d==q.d){
+            return true;
+        }else{
+            return false;
+        }
+    }
+};
