@@ -1,7 +1,3 @@
-ランク：S
-最高タイプ数：190
-
-K&R
 #include<stdio.h>
 int main(void){
     int x;

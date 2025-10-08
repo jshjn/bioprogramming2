@@ -1,4 +1,5 @@
 #include<iostream>
+using namespace std;
 
 class Matrix{
 public:
@@ -8,6 +9,7 @@ public:
         a=x, b=y;
         c=z, d=w;
     }
+
     Matrix operator + (const Matrix &q) const{
         Matrix m;
         m.a=a+q.a;
@@ -16,6 +18,7 @@ public:
         m.d=d+q.d;
         return(m);
     }
+
     Matrix operator *(const Matrix &q) const{
         Matrix m;
         m.a=a*q.a+b*q.c;
@@ -38,7 +41,11 @@ public:
         return(m);
     }
 
-    bool operator
-
-
-
+    bool operator==(const Matrix &q){
+        if(a==q.a && b==q.b && c==q.c && d==q.d){
+            return true;
+        }else{
+            return false;
+        }
+    }
+};
