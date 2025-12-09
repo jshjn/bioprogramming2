@@ -1,0 +1,4 @@
+12.5|Liver|Healthy
+15.0|Breast|Healthy
+14.0|Liver|Tumor
+1.2|Breast|Tumor
