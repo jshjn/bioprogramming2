@@ -42,20 +42,6 @@ class Image{
     void SetPixel(int y, int x, int c, unsigned char v){
         data[(y * w + x) * ch + c] = v;
     }
-
-    for(int y=0; y<img.height(); y++){
-    for(int x=0; x<img.width(); x++} {
-        int r = img(x, y, 0);
-        int g = img(x, y, 1);
-        int b = img(x, y, 2);
-
-        int gray = (r + g + b) / 3;
-
-        img(x, y, 0) = gray;
-        img(x, y, 1) = gray;
-        img(x, y, 2) = gray;
-    }
-}
 };
 
 #endif
