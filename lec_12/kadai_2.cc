@@ -85,6 +85,15 @@ double balanced_accuracy(vector<int>y_true, vector<int>y_pred){
     return (TDR+TNR)/2.000;
 }
 
+struct Data{
+    double dist;
+    int label;
+};
+
+bool compare_dist(Data a, Data b){
+    return a.dist<b.dist;
+}
+
 int main(void){
     init_aa_map();
     ifstream train_file("train_mitochondrion_cytoplasm_dataset.txt");
@@ -121,18 +130,20 @@ int main(void){
         vector<int> pred_knn(Ntest);
 
         for(int i=0; i<Ntest; i++){
-            vector<pair<double,int>>dist_label;
+            vector<Data> dist_label;
 
             for(int j=0; j<Ntrain; j++){
-                double d=distance_vec(test_feat[i], train_feat[j]);
-                dist_label.push_back({d, train_label[j]});
+                Data d;
+                d.dist=distance_vec(test_feat[i], train_feat[j]);
+                d.label=train_label[j];
+                dist_label.push_back(d);
             }
 
-            sort(dist_label.begin(), dist_label.end());
+            sort(dist_label.begin(), dist_label.end(), compare_dist);
 
             int count0=0, count1=0;
             for(int t=0; t<k; t++){
-                if(dist_label[t].second==1){
+                if(dist_label[t].label==1){
                     count1++;
                 }else{
                     count0++;
@@ -165,17 +176,19 @@ int main(void){
         vector<int> pred_knn(Ntest);
 
         for(int i= 0; i<Ntest; i++){
-            vector<pair<double,int>> dist_label;
+            vector<Data>dist_label;;
 
             for(int j=0; j<Ntrain; j++){
-                double d=distance_vec(test_feat_N[i], train_feat_N[j]);
-                dist_label.push_back({d, train_label[j]});
+                Data d;
+                d.dist=distance_vec(test_feat_N[i], train_feat_N[j]);
+                d.label=train_label[j];
+                dist_label.push_back(d);
             }
-            sort(dist_label.begin(), dist_label.end());
+            sort(dist_label.begin(), dist_label.end(), compare_dist);
 
             int count0=0, count1=0;
-            for(int t=0; t<k; t++) {
-                if (dist_label[t].second == 1){
+            for(int t=0; t<k; t++){
+                if(dist_label[t].label==1){
                     count1++;
                 }else{
                     count0++;
@@ -201,7 +214,7 @@ int main(void){
 //k=5, Balanced Accuracy=0.614316
 //k=7, Balanced Accuracy=0.601967
 //N末端での細胞局在予測
-//k=1, Balanced Accuracy=0.654152
-//k=3, Balanced Accuracy=0.66433
-//k=5, Balanced Accuracy=0.654693
-//k=7, Balanced Accuracy=0.644864
+//k=1, Balanced Accuracy=0.668154
+//k=3, Balanced Accuracy=0.676795
+//k=5, Balanced Accuracy=0.668889
+//k=7, Balanced Accuracy=0.660868
