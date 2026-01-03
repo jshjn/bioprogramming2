@@ -43,6 +43,13 @@ double distance_vec(vector<double>a, vector<double>b){
     return sqrt(sum);
 }
 
+vector<double> make_feature_N(string seq){
+    if(seq.length()>30){
+        seq=seq.substr(0,30);
+    }
+    return make_feature(seq);
+}
+
 double balanced_accuracy(vector<int>y_true, vector<int>y_pred){
     int TP=0;
     int TN=0;
@@ -108,7 +115,9 @@ int main(void){
 
     int K_list[4]={1,3,5,7};
 
-    for(int k=0; k<4; k++){
+    cout<<"k-近傍法による細胞局在予測"<<endl;
+    for(int kk=0; kk<4; kk++){
+        int k=K_list[kk];
         vector<int> pred_knn(Ntest);
 
         for(int i=0; i<Ntest; i++){
@@ -131,25 +140,28 @@ int main(void){
             }
 
             if(count1>count0){
-                pred_knn[k]=1;
+                pred_knn[i]=1;
             }else{
-                pred_knn[k]=0;
+                pred_knn[i]=0;
             }
         }
 
         cout<<"k="<<k<<", Balanced Accuracy="<<balanced_accuracy(test_label, pred_knn)<<endl;
+        k++;
     }
 
     vector<vector<double>>train_feat_N, test_feat_N;
 
     for(int i=0; i<Ntrain; i++){
-        train_feat_N.push.back(make_feature_N(train_seq[i]));
+        train_feat_N.push_back(make_feature_N(train_seq[i]));
     }
     for(int i=0; i<Ntest; i++){
-        test_feat_N.push.back(make_feature_N(test_seq[i]));
+        test_feat_N.push_back(make_feature_N(test_seq[i]));
     }
 
-    for (int k=0; k<4; k++){
+    cout<<"N末端での細胞局在予測"<<endl;
+    for (int kk=0; kk<4; kk++){
+        int k=K_list[kk];
         vector<int> pred_knn(Ntest);
 
         for(int i= 0; i<Ntest; i++){
@@ -159,7 +171,6 @@ int main(void){
                 double d=distance_vec(test_feat_N[i], train_feat_N[j]);
                 dist_label.push_back({d, train_label[j]});
             }
-
             sort(dist_label.begin(), dist_label.end());
 
             int count0=0, count1=0;
@@ -178,8 +189,19 @@ int main(void){
             }
         }
 
-        cout<<"k = "<< k<<", Balanced Accuracy="<<balanced_accuracy(test_label, pred_knn)<<endl;
+        cout<<"k="<<k<<", Balanced Accuracy="<<balanced_accuracy(test_label, pred_knn)<<endl;
     }
 
     return 0;
 }
+
+//k-近傍法による細胞局在予測
+//k=1, Balanced Accuracy=0.586959
+//k=3, Balanced Accuracy=0.608775
+//k=5, Balanced Accuracy=0.614316
+//k=7, Balanced Accuracy=0.601967
+//N末端での細胞局在予測
+//k=1, Balanced Accuracy=0.654152
+//k=3, Balanced Accuracy=0.66433
+//k=5, Balanced Accuracy=0.654693
+//k=7, Balanced Accuracy=0.644864
