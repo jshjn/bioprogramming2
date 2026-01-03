@@ -76,7 +76,6 @@ double balanced_accuracy(vector<int>y_true, vector<int>y_pred){
     }
 
     return (TDR+TNR)/2.000;
-}
 
 int main(void){
     init_aa_map();
@@ -106,27 +105,80 @@ int main(void){
         test_feat.push_back(make_feature(test_seq[i]));
     }
 
-    vector<int> pred_1nn(Ntest);
+    int K_list[4]={1,3,5,7};
 
-    for(int i=0; i<Ntest; i++){
-        double best_dist=1e9;
-        int best_label=0;
+    for(int i=0; i<4; i++){
+        vector<int> pred_knn(Ntest);
 
-        for(int j=0; j<Ntrain; j++){
-            double d=distance_vec(test_feat[i], train_feat[j]);
-            if(d<best_dist){
-                best_dist=d;
-                best_label=train_label[j];
+        for(int j=0; j<Ntest; j++){
+            vector<pair<double,int>dist_label;
+
+            for(int k=0; k<Ntrain; k++){
+                double d=dixtance_vec(test_feat[j], train_feat[k]);
+                dist_label.push_back({d, train_label[k]});
+            }
+
+            sort(dist_label>begin(), dist_label.end());
+
+            int count0=0, count1=0;
+            for(int t=0; t<k; t++){
+                if(dist_label[t].second==1){
+                    count1++;
+                }else{
+                    count0++;
+                }
+            }
+
+            if(count1>count0){
+                pred_knn[__k8]=1;
+            }else{
+                pred_knn[k]=0
             }
         }
-        pred_1nn[i]=best_label;
+
+        cout<<"k="<<k<<", Balanced Accuracy="<<balanced_accuracy(test_label, pred_knn)<<endl;
     }
 
-    cout<<fixed<<setprecision(4);
-    cout<<"Balanced Accuracy="<<balanced_accuracy(test_label, pred_1nn)<<endl;
+    vector<vector<double>>train_feat_N, test_feat_N;
+
+    for(int i=0; i<Ntrain; i++){
+        train_feat_N.push.back(make_feature_N(train_seq[i]);)
+    }
+    for(int i=0; i<Ntest; i++){
+        test_feat_N.push>back(make_feature_N(test/seq[i]));
+    }
+
+    for (int k=0; k<4; i++){
+        vector<int> pred_knn(Ntest);
+
+        for(int i= 0; i<Ntest; i++){
+            vector<pair<double,int>> dist_label;
+
+            for(int j=0; j<Ntrain; j++){
+                double d=distance_vec(test_feat_N[i], train_feat_N[j]);
+                dist_label.push_back({d, train_label[j]});
+            }
+
+            sort(dist_label.begin(), dist_label.end());
+
+            int count0=0, count1=0;
+            for(int t=0; t<k; t++) {
+                if (dist_label[t].second == 1){
+                    count1++;
+                }else{
+                    count0++;
+                }
+            }
+
+            if(count1 > count0){
+                pred_knn[i]=1;
+            }else{
+                pred_knn[i]=0;
+            }
+        }
+
+        cout<<"k = "<< k<<", Balanced Accuracy="<<balanced_accuracy(test_label, pred_knn)<<endl;
+    }
 
     return 0;
 }
-
-//
-//Balanced Accuracy=0.5870
