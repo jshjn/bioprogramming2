@@ -76,6 +76,7 @@ double balanced_accuracy(vector<int>y_true, vector<int>y_pred){
     }
 
     return (TDR+TNR)/2.000;
+}
 
 int main(void){
     init_aa_map();
@@ -107,18 +108,18 @@ int main(void){
 
     int K_list[4]={1,3,5,7};
 
-    for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++){
         vector<int> pred_knn(Ntest);
 
-        for(int j=0; j<Ntest; j++){
-            vector<pair<double,int>dist_label;
+        for(int i=0; i<Ntest; i++){
+            vector<pair<double,int>>dist_label;
 
-            for(int k=0; k<Ntrain; k++){
-                double d=dixtance_vec(test_feat[j], train_feat[k]);
-                dist_label.push_back({d, train_label[k]});
+            for(int j=0; j<Ntrain; j++){
+                double d=distance_vec(test_feat[i], train_feat[j]);
+                dist_label.push_back({d, train_label[j]});
             }
 
-            sort(dist_label>begin(), dist_label.end());
+            sort(dist_label.begin(), dist_label.end());
 
             int count0=0, count1=0;
             for(int t=0; t<k; t++){
@@ -130,9 +131,9 @@ int main(void){
             }
 
             if(count1>count0){
-                pred_knn[__k8]=1;
+                pred_knn[k]=1;
             }else{
-                pred_knn[k]=0
+                pred_knn[k]=0;
             }
         }
 
@@ -142,13 +143,13 @@ int main(void){
     vector<vector<double>>train_feat_N, test_feat_N;
 
     for(int i=0; i<Ntrain; i++){
-        train_feat_N.push.back(make_feature_N(train_seq[i]);)
+        train_feat_N.push.back(make_feature_N(train_seq[i]));
     }
     for(int i=0; i<Ntest; i++){
-        test_feat_N.push>back(make_feature_N(test/seq[i]));
+        test_feat_N.push.back(make_feature_N(test_seq[i]));
     }
 
-    for (int k=0; k<4; i++){
+    for (int k=0; k<4; k++){
         vector<int> pred_knn(Ntest);
 
         for(int i= 0; i<Ntest; i++){
